@@ -11,6 +11,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "ant-design-vue": "^3.1.1",
     "axios": "^0.24.0",
     "naive-ui": "^2.21.2",
     "nprogress": "^0.2.0",
