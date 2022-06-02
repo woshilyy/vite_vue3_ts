@@ -8,10 +8,10 @@ axios.defaults.timeout = 10000
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 axios.interceptors.request.use(
   (config): AxiosRequestConfig<any> => {
-    const token = window.sessionStorage.getItem('token')
+    const token = window.localStorage.getItem('token')
     if (token) {
       //@ts-ignore
-      config.headers.token = token
+      config.headers.Authorization = 'Bearer ' + token
     }
     return config
   },
@@ -21,8 +21,8 @@ axios.interceptors.request.use(
 )
 // 响应拦截
 axios.interceptors.response.use((res) => {
-  if (res.data.code === 111) {
-    sessionStorage.setItem('token', '')
+  if (res.data.code === 401) {
+    localStorage.setItem('token', '')
     // token过期操作
   }
   return res

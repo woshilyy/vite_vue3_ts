@@ -5,6 +5,9 @@
     </div>
     <a-table :data-source="state.dataSource" :columns="columns">
       <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex === 'tag'">
+          <span v-for="(item, index) in record.tags" :key="index">{{ item.label || '--' }}</span>
+        </template>
         <template v-if="column.dataIndex === 'action'">
           <a-button type="link" @click="edit(record)">编辑</a-button>
           <a-button type="link" danger @click="del(record)">删除</a-button>
@@ -36,15 +39,17 @@
         >
           <a-input v-model:value="formState.content" />
         </a-form-item>
-        <a-form-item
-          label="作者"
-          name="author"
-          :rules="[{ required: true, message: '请输入作者' }]"
-        >
-          <a-input v-model:value="formState.author" />
+        <a-form-item label="简介" name="desc" :rules="[{ required: true, message: '请输入简介' }]">
+          <a-input v-model:value="formState.desc" />
         </a-form-item>
-        <a-form-item label="类型" name="type" :rules="[{ required: true, message: '请选择类型' }]">
-          <a-input v-model:value="formState.type" />
+        <a-form-item label="类型" name="tags" :rules="[{ required: true, message: '请选择类型' }]">
+          <a-select
+            v-model:value="formState.tags"
+            mode="tags"
+            style="width: 100%"
+            placeholder="类型"
+            :options="state.tagList"
+          ></a-select>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -58,6 +63,7 @@ import { message } from 'ant-design-vue'
 
 const state = reactive({
   dataSource: [],
+  tagList: [],
 })
 const columns = [
   {
@@ -71,38 +77,38 @@ const columns = [
     key: 'content',
   },
   {
-    title: '作者',
-    dataIndex: 'author',
-    key: 'author',
+    title: '简介',
+    dataIndex: 'desc',
+    key: 'desc',
   },
   {
-    title: '类型',
-    dataIndex: 'type',
-    key: 'type',
+    title: '标签',
+    dataIndex: 'tag',
+    key: 'tag',
   },
-  // {
-  //   title: '操作',
-  //   width: 200,
-  //   dataIndex: 'action',
-  //   scopedSlots: {
-  //     customRender: 'action',
-  //   },
-  //   fixed: 'right',
-  // },
+  {
+    title: '操作',
+    width: 200,
+    dataIndex: 'action',
+    scopedSlots: {
+      customRender: 'action',
+    },
+    fixed: 'right',
+  },
 ]
 const visible = ref<boolean>(false)
 interface FormState {
   title: string
   content: string
-  author: string
-  type: number
+  desc: string
+  tags: Array<number>
 }
 
 const formState = reactive<FormState>({
   title: '',
   content: '',
-  author: '',
-  type: 2,
+  desc: '',
+  tags: [],
 })
 
 const add = () => {
@@ -117,16 +123,39 @@ async function del(record) {
   getList()
 }
 const handleOk = async (e: MouseEvent) => {
-  await service.addPosts.addPost(formState)
+  const { title, desc, content, tags } = formState
+  const tag = tags.map((i) => {
+    return {
+      id: i,
+    }
+  })
+  await service.addPosts.addPost({ tags: tag, title, desc, content })
   visible.value = false
   getList()
 }
 async function getList() {
-  state.dataSource = (await service.getPosts.getPostList({ pageNum: 1, pageSize: 10 })).data.list
+  try {
+    state.dataSource = (await service.getPosts.getPostList({ page: 1, pageSize: 10 })).data.list
+  } catch (e) {
+    console.log(e)
+  }
+}
+async function getTagList() {
+  try {
+    state.tagList = (await service.getTagList.getTagList()).data.list.map((i) => {
+      return {
+        value: i.id,
+        label: i.label,
+      }
+    })
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 onMounted(() => {
   getList()
+  getTagList()
 })
 </script>
 

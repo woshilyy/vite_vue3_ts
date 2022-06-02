@@ -4,6 +4,7 @@ export const useMainStore = defineStore({
   id: 'mian',
   state: () => ({
     name: '超级管理员',
+    hasLogin: localStorage.getItem('token'),
   }),
   getters: {
     nameLength: (state) => state.name.length,
@@ -13,6 +14,9 @@ export const useMainStore = defineStore({
       // 可以做异步
       // await doAjaxRequest(data);
       this.name = data
+    },
+    updateToken(hasLogin: any) {
+      this.hasLogin = hasLogin
     },
   },
 })

@@ -1,11 +1,12 @@
 //login.ts
 import http from '@/service/http'
 import * as T from './types'
-
-const loginApi: T.ILoginApi = {
-  login(params) {
-    return http.post('/login', params)
-  },
+class Service {
+  loginApi: T.ILoginApi = {
+    login(params) {
+      return http.post('http://localhost:3000/user/login', params)
+    },
+  }
 }
 
-export default loginApi
+export default new Service()

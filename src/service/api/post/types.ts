@@ -1,5 +1,5 @@
 export interface IGetPostsParams {
-  pageNum: number
+  page: number
   pageSize: number
 }
 export interface IAddPostsParams {
@@ -17,4 +17,7 @@ export interface IAddPosts {
 
 export interface IDelPosts {
   delPost: (id: number) => Promise<any>
+}
+export interface IGetTags {
+  getTagList: () => Promise<any>
 }

@@ -2,7 +2,12 @@
   <a-layout style="min-height: 100vh">
     <a-layout-sider v-model:collapsed="collapsed" collapsible>
       <div class="logo" />
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+      <a-menu
+        v-model:selectedKeys="selectedKeys"
+        theme="dark"
+        mode="inline"
+        @select="handleSelected"
+      >
         <a-menu-item key="1">
           <pie-chart-outlined />
           <span>Option 1</span>
@@ -63,7 +68,9 @@ import {
   TeamOutlined,
   FileOutlined,
 } from '@ant-design/icons-vue'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import { useRouter } from '@/use'
+const router = useRouter()
 export default defineComponent({
   components: {
     PieChartOutlined,
@@ -71,6 +78,15 @@ export default defineComponent({
     UserOutlined,
     TeamOutlined,
     FileOutlined,
+  },
+  setup() {
+    function handleSelected(value: any) {}
+    onMounted(() => {
+      router.push('/article')
+    })
+    return {
+      handleSelected,
+    }
   },
   data() {
     return {
