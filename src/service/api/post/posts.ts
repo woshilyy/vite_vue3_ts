@@ -13,9 +13,14 @@ class Service {
       return http.post('http://localhost:3000/article', params)
     },
   }
+  editPosts: T.IEditPosts = {
+    editPost(params) {
+      return http.post('http://localhost:3000/article/edit', params)
+    },
+  }
   deletePosts: T.IDelPosts = {
-    delPost(id: number) {
-      return http.post(`http://localhost:3000/api/posts/delete/${id}`)
+    delPost(params) {
+      return http.post(`http://localhost:3000/article/delete`, params)
     },
   }
   getTagList: T.IGetTags = {

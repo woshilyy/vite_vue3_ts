@@ -20,13 +20,12 @@ axios.interceptors.request.use(
   }
 )
 // 响应拦截
-axios.interceptors.response.use((res) => {
-  if (res.data.code === 401) {
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
     localStorage.setItem('token', '')
-    // token过期操作
   }
-  return res
-})
+)
 
 interface ResType<T> {
   code: number
