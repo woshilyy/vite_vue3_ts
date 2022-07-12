@@ -23,8 +23,8 @@
               <span>文章</span>
             </span>
           </template>
-          <a-menu-item key="3">文章管理</a-menu-item>
-          <a-menu-item key="4">Bill</a-menu-item>
+          <a-menu-item key="article">文章管理</a-menu-item>
+          <a-menu-item key="tag">标签管理</a-menu-item>
           <a-menu-item key="5">Alex</a-menu-item>
         </a-sub-menu>
         <a-sub-menu key="sub2">
@@ -80,7 +80,9 @@ export default defineComponent({
     FileOutlined,
   },
   setup() {
-    function handleSelected(value: any) {}
+    function handleSelected(value: any) {
+      router.push(`/${value.key}`)
+    }
     onMounted(() => {
       router.push('/article')
     })
@@ -91,7 +93,7 @@ export default defineComponent({
   data() {
     return {
       collapsed: ref<boolean>(false),
-      selectedKeys: ref<string[]>(['3']),
+      selectedKeys: ref<string[]>(['article']),
     }
   },
 })

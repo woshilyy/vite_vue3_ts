@@ -11,6 +11,11 @@ const routes: RouteRecordRaw[] = [
     name: 'article',
     component: () => import('@/pages/article/Index.vue'),
   },
+  {
+    path: '/tag',
+    name: 'tag',
+    component: () => import('@/pages/tag/Index.vue'),
+  },
 ]
 
 const router = createRouter({
